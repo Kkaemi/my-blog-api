@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository, TypeORMError } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { PostsService } from './posts.service';
 
@@ -33,35 +33,25 @@ describe('PostsService', () => {
   it('게시글 저장', async () => {
     // given
     const post = new Post();
-    post.filePath = 'test/2021/9/1/';
-    post.fileName = 'test.md';
+    post.title = 'test';
+    post.content = 'test test test';
 
     const resolvedValue = {
       postId: 1,
-      filePath: 'test/2021/9/1',
-      fileName: 'test.md',
+      title: 'test',
+      content: 'test test test',
       viewCount: 0,
       createdAt: new Date(),
       updatedAt: null,
+      deletedAt: null,
     };
 
-    const typeORMError = new TypeORMError('fileName이 중복됩니다.');
-    let catchError: TypeORMError;
-
-    postsRepository.save
-      .mockResolvedValueOnce(resolvedValue)
-      .mockRejectedValueOnce(typeORMError);
+    postsRepository.save.mockResolvedValue(resolvedValue);
 
     // when
     const savedPost = await postsRepository.save(post);
-    try {
-      await postsRepository.save(post);
-    } catch (error: any) {
-      catchError = error;
-    }
 
     // then
     expect(savedPost).toEqual(resolvedValue);
-    expect(catchError).toEqual(typeORMError);
   });
 });

@@ -1,17 +1,22 @@
-import { BaseTimeEntity } from 'src/common/entities/base-time.entity';
-import { Column, Entity, Generated } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  Generated,
+} from 'typeorm';
 
 @Entity()
-export class Post extends BaseTimeEntity {
+export class Post {
   @Column({ type: 'bigint', primary: true, unsigned: true })
   @Generated('increment')
   postId: number;
 
-  @Column({ nullable: false })
-  filePath: string;
+  @Column({ type: 'varchar', nullable: false })
+  title: string;
 
-  @Column({ nullable: false, unique: true })
-  fileName: string;
+  @Column({ type: 'text', nullable: false })
+  content: string;
 
   @Column({
     type: 'bigint',
@@ -20,4 +25,19 @@ export class Post extends BaseTimeEntity {
     unsigned: true,
   })
   viewCount: number;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @Column({
+    type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    width: 6,
+    insert: false,
+    nullable: true,
+  })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: 'timestamp' })
+  deletedAt: Date;
 }
