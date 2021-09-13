@@ -3,13 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  Generated,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Tag } from '../tags/tag.entity';
 
 @Entity()
 export class Post {
-  @Column({ type: 'bigint', primary: true, unsigned: true })
-  @Generated('increment')
+  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   postId: number;
 
   @Column({ type: 'varchar', nullable: false })
@@ -31,13 +32,14 @@ export class Post {
 
   @Column({
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
     width: 6,
-    insert: false,
     nullable: true,
   })
   updatedAt: Date;
 
   @DeleteDateColumn({ type: 'timestamp' })
-  deletedAt: Date;
+  deletedAt?: Date;
+
+  @ManyToMany(() => Tag, (tag) => tag.posts)
+  tags: Tag[];
 }

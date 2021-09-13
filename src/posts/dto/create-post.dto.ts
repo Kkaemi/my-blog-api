@@ -1,13 +1,25 @@
-import { Post } from '../post.entity';
+import {
+  IsString,
+  IsNotEmpty,
+  IsArray,
+  ArrayNotEmpty,
+  ArrayUnique,
+  MaxLength,
+} from 'class-validator';
 
 export class CreatePostDto {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255)
   title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(65535)
   content: string;
 
-  toEntity(): Post {
-    const post = new Post();
-    post.title = this.title;
-    post.content = this.content;
-    return post;
-  }
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  tags: string[];
 }
