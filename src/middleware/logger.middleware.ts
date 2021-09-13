@@ -11,7 +11,7 @@ export class LoggerMiddleware implements NestMiddleware {
     this.logger.log(`요청 : ${originalUrl} ${method}`, ip);
 
     res.on('finish', () => {
-      this.logger.log(`응답 : ${res.statusCode}`, ip);
+      this.logger.log(`응답 : ${res.statusCode}\n`, ip);
     });
 
     next();
