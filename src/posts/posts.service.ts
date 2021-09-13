@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -33,7 +33,13 @@ export class PostsService {
   }
 
   async findOne(id: number): Promise<Post> {
-    return await this.postsRepository.findOne(id);
+    return await this.postsRepository.findOne(id).then((entity) => {
+      if (!entity) {
+        throw new NotFoundException();
+      }
+
+      return entity;
+    });
   }
 
   async update(id: number, updatePostDto: UpdatePostDto): Promise<void> {
@@ -56,6 +62,8 @@ export class PostsService {
   }
 
   async remove(id: number): Promise<void> {
+    await this.findOne(id);
+
     await this.postsRepository
       .createQueryBuilder()
       .softDelete()
