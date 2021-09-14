@@ -18,30 +18,30 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body(new ValidationPipe()) createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  async create(@Body(new ValidationPipe()) createPostDto: CreatePostDto) {
+    return await this.postsService.create(createPostDto);
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  async findAll() {
+    return await this.postsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.postsService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.postsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) updatePostDto: UpdatePostDto,
   ) {
-    return this.postsService.update(id, updatePostDto);
+    return await this.postsService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.postsService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.postsService.remove(id);
   }
 }

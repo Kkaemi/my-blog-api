@@ -13,7 +13,7 @@ export class Post {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   postId: number;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', unique: true, nullable: false })
   title: string;
 
   @Column({ type: 'text', nullable: false })
