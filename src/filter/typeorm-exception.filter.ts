@@ -11,9 +11,9 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const { url, ip } = ctx.getRequest<Request>();
     const status = 500;
-    const { message, stack, name } = exception;
+    const { message, name } = exception;
 
-    this.logger.error(message, stack, name);
+    this.logger.error(message, name);
     this.logger.error(`TypeORMError 발생`, ip);
 
     response.status(status).json({
@@ -21,7 +21,6 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: url,
-      message,
     });
   }
 }

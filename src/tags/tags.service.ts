@@ -12,9 +12,7 @@ export class TagsService {
   ) {}
 
   async create(createTagDto: CreateTagDto): Promise<void> {
-    const tags = await this.tagsRepository.find({
-      name: In(createTagDto.names),
-    });
+    const tags = await this.findInName(createTagDto.names);
 
     const notExistNames = createTagDto.names
       .filter((name) => !tags.map((tag) => tag.name).includes(name))
@@ -26,6 +24,20 @@ export class TagsService {
       .values(notExistNames)
       .useTransaction(true)
       .execute();
+  }
+
+  async findInName(names: string[]): Promise<Tag[]> {
+    return await this.tagsRepository.find({
+      name: In(names),
+    });
+  }
+
+  async findByPostId(postId: number): Promise<Tag[]> {
+    return await this.tagsRepository
+      .createQueryBuilder('tag')
+      .innerJoin('tag.posts', 'posts')
+      .where('posts.postId = :postId', { postId })
+      .getMany();
   }
 
   async findAll(): Promise<Tag[]> {
