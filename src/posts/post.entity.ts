@@ -1,9 +1,11 @@
+import { Comment } from 'src/comments/comment.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Tag } from '../tags/tag.entity';
@@ -13,7 +15,7 @@ export class Post {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   postId: number;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', unique: true, nullable: false })
   title: string;
 
   @Column({ type: 'text', nullable: false })
@@ -42,4 +44,7 @@ export class Post {
 
   @ManyToMany(() => Tag, (tag) => tag.posts)
   tags: Tag[];
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }
